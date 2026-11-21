@@ -1,7 +1,7 @@
 ---
 title: Value iteration
 claim: When the rules of a world are known, repeatedly updating each state's value finds the best action everywhere.
-month: 1
+week: 7
 order: 1
 status: planned
 demo: { type: animation, alt: "Gridworld values filling in sweep by sweep, with best-move arrows" }

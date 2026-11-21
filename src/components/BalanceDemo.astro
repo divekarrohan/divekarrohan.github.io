@@ -1,0 +1,27 @@
+---
+// Interactive balance controller; logic lives in /public/demos (tested headless in Node).
+---
+<figure class="demo" id="balance" aria-label="Interactive balance controller">
+  <canvas aria-label="A one-joint robot balancing on its ankle, with a plot of its lean over the last six seconds. Click to push it."></canvas>
+  <div class="controls">
+    <label>
+      <span>Command latency <output data-out="latency">10 ms</output></span>
+      <input type="range" name="latency" min="0" max="150" step="5" value="10" />
+    </label>
+    <label>
+      <span>Ankle torque limit <output data-out="limit">300 N·m</output></span>
+      <input type="range" name="limit" min="60" max="400" step="10" value="300" />
+    </label>
+    <div class="row">
+      <button type="button" class="button" data-push>Push it</button>
+      <label class="toggle"><input type="checkbox" name="predict" /> Predict ahead by the latency</label>
+    </div>
+  </div>
+  <p data-status aria-live="polite">Push it, or click on the figure.</p>
+  <figcaption class="caption">
+    A standing robot reduced to one joint: 35 kg with its center of mass 0.7 m above the ankle, under PD control
+    at 1 kHz. Raise the latency past about 90&nbsp;ms and it falls; switch on prediction and it stands again. Lower the
+    torque limit and no controller saves it.
+  </figcaption>
+</figure>
+<script is:inline type="module" src="/demos/balance-ui.js"></script>

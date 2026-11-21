@@ -1,29 +1,107 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import BalanceDemo from '../components/BalanceDemo.astro';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.month - b.data.month);
-const concepts = await getCollection('concepts');
-const liveConcepts = concepts.filter((c) => c.data.status === 'live').length;
+const concepts = (await getCollection('concepts')).sort(
+  (a, b) => a.data.week - b.data.week || a.data.order - b.data.order,
+);
+const nextNotes = concepts.slice(0, 5);
+const live = concepts.filter((c) => c.data.status === 'live').length;
+
+const layers = [
+  { rate: '50 Hz', name: 'Policy', what: 'RL velocity policy trained in mjlab with my identified actuator model, exported to ONNX', when: 'Weeks 10–13', policy: true },
+  { rate: '50 Hz', name: 'Safety filter', what: 'A control-barrier-function QP that keeps policy targets inside joint and balance limits', when: 'Week 14' },
+  { rate: '500 Hz', name: 'Estimation and whole-body balance', what: 'Contact-aided Kalman filter for the floating base; whole-body QP that keeps the robot standing', when: 'Weeks 5–6' },
+  { rate: '1 kHz', name: 'Joint servo', what: 'PD and impedance control with gravity feedforward, torque limits and a command watchdog', when: 'Week 4' },
+  { rate: '1 kHz', name: 'Hardware interface and actuators', what: 'A bus with latency, jitter and dropped packets; motor and gearbox models identified from data', when: 'Weeks 1–3' },
+  { rate: 'All', name: 'Supervisor', what: 'Detects faults at every layer and hands control from the policy to damping, then to the whole-body stand', when: 'Week 14' },
+];
+
+const roles = [
+  { years: '2026–now', org: 'Applied Intuition', lines: ['Vehicle control, safety architecture and embedded deployment for autonomous trucks.'] },
+  { years: '2024–2026', org: 'Symbotic', lines: ['Technical lead. Architected multi-robot simulations modeling hundreds of warehouse robots.'] },
+  { years: '2022–2024', org: 'Ford', lines: ['Led the motion control team.', 'Designed and prototyped a shared steering strategy for lane-centering assist, so the controller yields smoothly to the driver.', 'Owned an ASIL B steering limiter end to end: the design and its safety argument, including the FMEA.'] },
+  { years: '2019–2022', org: 'Embark Trucks', lines: ['Built and led a team of four control engineers.', 'A state-feedback controller for Class 8 highway driving improved tracking by 20% in on-vehicle testing; I then led the move to MPC to handle empty trailers.', 'Trajectory shifting that keeps trailer wheels off the curb on highway ramps; the verification process for controls testing.'] },
+  { years: '2016–2019', org: 'Uber ATG', lines: ['Embedded integration and fleet debugging for autonomous vehicles; first point of contact for OEM engineers.'] },
+  { years: '2013–2016', org: 'Magna, Takata', lines: ['Driver-assistance foundations: adaptive cruise control and vehicle-to-vehicle work.'] },
+];
 ---
-<Base title="Rohan · ML control for Physical AI">
-  <h1>Controls engineer, building ML-based planning and control for autonomous vehicles and Physical AI</h1>
-  <p>
-    13+ years building safety-critical control for autonomous vehicles: MPC, embedded real-time C++ and
-    functional safety. Now building the learning side of the driving stack: imitation-learned and RL planners,
-    learned vs model-based tracking, and validation layers for learned planning, then carrying the same pattern
-    over to humanoid robots. Every claim on this site links to code and reproducible numbers.
-  </p>
+<Base title="Rohan Divekar · Controls engineer">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Rohan Divekar</h1>
+        <p class="lede">I build control systems that make machines move safely, from the actuator loop up to the layer where a learned policy takes over.</p>
+        <ul class="facts">
+          <li><strong>13 years</strong> in controls, motion planning and autonomy</li>
+          <li>Shipped on <strong>Class 8 trucks, passenger cars and warehouse robots</strong></li>
+          <li>MPC, real-time embedded C++, functional safety to ISO&nbsp;26262</li>
+          <li>US patent <a href="https://patents.google.com/patent/US9740945">9,740,945</a></li>
+        </ul>
+        <div class="links">
+          <a href="#stack">What I'm building</a>
+          <a href="#shipped">What I've shipped</a>
+          <a href="https://github.com/divekarrohan">GitHub</a>
+        </div>
+      </div>
+      <BalanceDemo />
+    </div>
 
-  <h2>Projects</h2>
-  <div class="grid">
-    {projects.map((p) => <ProjectCard project={p} />)}
+    <section id="stack" aria-labelledby="stack-h">
+      <div class="section-head">
+        <h2 id="stack-h">Building now: a humanoid control stack, from actuators to policy</h2>
+        <p>Sixteen weeks on a simulated Unitree G1. Each layer runs at its own rate, and each gets a published demo. The headline result will be one plot: the same RL policy trained three ways, run inside this stack across a latency sweep.</p>
+      </div>
+      <ol class="ladder">
+        {layers.map((l) => (
+          <li>
+            <span class:list={['rate', { policy: l.policy }]}>{l.rate}</span>
+            <div><h3>{l.name}</h3><p>{l.what}</p></div>
+            <span class="when">{l.when}</span>
+          </li>
+        ))}
+      </ol>
+      <div class="status-line">
+        <span>Starts <strong>Nov 23, 2026</strong></span>
+        <span>The repo opens in week 1</span>
+        <a href="/projects/">Plan and gates</a>
+      </div>
+    </section>
+
+    <section id="shipped" aria-labelledby="shipped-h">
+      <div class="section-head">
+        <h2 id="shipped-h">Shipped</h2>
+        <p>Control on real vehicles and robots, newest first.</p>
+      </div>
+      <ol class="roles">
+        {roles.map((r) => (
+          <li>
+            <span class="years">{r.years}</span>
+            <span class="org">{r.org}</span>
+            <div>{r.lines.map((t) => <p>{t}</p>)}</div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="notes" aria-labelledby="notes-h">
+      <div class="section-head">
+        <h2 id="notes-h">Notes</h2>
+        <p>Every concept I build gets a demo and the numbers behind it. {live === 1 ? 'One is live so far' : `${live} are live so far`}; the rest appear week by week.</p>
+      </div>
+      <ul class="notes">
+        {nextNotes.map((c) => (
+          <li>
+            <a href={`/concepts/${c.id}/`}>
+              <span class="wk">{c.data.week === 0 ? 'Ready now' : `Week ${c.data.week}`}</span>
+              <div><h3>{c.data.title}</h3><p>{c.data.claim}</p></div>
+              <span class:list={['state', { live: c.data.status === 'live' }]}>{c.data.status === 'live' ? 'Live' : 'Planned'}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="status-line"><a href="/concepts/">All notes</a></p>
+    </section>
   </div>
-
-  <h2>Concepts</h2>
-  <p>
-    {liveConcepts} of {concepts.length} concept demos live. Each one is a simulation, animation or plot with the
-    numbers behind it. <a href="/concepts/">See all concepts</a>.
-  </p>
 </Base>

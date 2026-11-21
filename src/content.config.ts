@@ -13,7 +13,7 @@ const concepts = defineCollection({
     .object({
       title: z.string(),
       claim: z.string(),
-      month: z.number().int().min(1).max(6),
+      week: z.number().int().min(0).max(16), // week of the 16-week plan; 0 = done before it
       order: z.number().int(),
       status: z.enum(['planned', 'in-progress', 'live']),
       demo: z.object({
@@ -40,7 +40,8 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     repo: z.string(), // repo name on GitHub
-    month: z.number().int().min(1).max(6),
+    weeks: z.string(), // e.g. "1–16"
+    order: z.number().int(),
     status: z.enum(['planned', 'in-progress', 'live']),
     proves: z.string(),
     headline: z.string(), // the one number a hiring manager should see

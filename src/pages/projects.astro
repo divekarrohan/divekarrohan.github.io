@@ -2,23 +2,31 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.month - b.data.month);
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const rendered = await Promise.all(projects.map(async (p) => ({ p, Content: (await render(p)).Content })));
 ---
-<Base title="Projects · Rohan">
-  <h1>Projects</h1>
-  <p class="muted">One public repo per month. Each ends with a gate it has to pass.</p>
-  {rendered.map(({ p, Content }) => (
-    <section class="card" style="margin: 16px 0">
-      <span class:list={['badge', { live: p.data.status === 'live' }]}>Month {p.data.month} · {p.data.status}</span>
-      <h3>{p.data.title}</h3>
-      <p class="headline">{p.data.headline}</p>
-      <dl>
-        <dt>Proves</dt><dd>{p.data.proves}</dd>
-        <dt>Gate</dt><dd>{p.data.gate}</dd>
-        <dt>Repo</dt><dd>{p.data.status === 'planned' ? p.data.repo : <a href={`https://github.com/divekarrohan/${p.data.repo}`}>{p.data.repo}</a>}</dd>
-      </dl>
-      <Content />
+<Base title="Projects · Rohan Divekar">
+  <div class="wrap">
+    <section style="padding-top: 32px">
+      <div class="section-head">
+        <h1 style="font-size: clamp(2.4rem, 5vw, 3.5rem)">Projects</h1>
+        <p>Each project is a public repo that ends with a gate it has to pass before I call it done.</p>
+      </div>
+      <ol class="roles">
+        {rendered.map(({ p, Content }) => (
+          <li>
+            <span class="years">Weeks {p.data.weeks}</span>
+            <span class="org">{p.data.status === 'planned' ? p.data.repo : <a href={`https://github.com/divekarrohan/${p.data.repo}`}>{p.data.repo}</a>}</span>
+            <div>
+              <h3 style="margin-bottom: 8px">{p.data.title}</h3>
+              <p>{p.data.proves}.</p>
+              <p class="quiet">{p.data.headline}</p>
+              <p><strong>Gate:</strong> {p.data.gate}</p>
+              <Content />
+            </div>
+          </li>
+        ))}
+      </ol>
     </section>
-  ))}
+  </div>
 </Base>

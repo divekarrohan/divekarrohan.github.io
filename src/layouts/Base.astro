@@ -1,15 +1,19 @@
 ---
+import '@fontsource-variable/archivo/wdth.css';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
 }
-const { title, description = 'Controls engineer building toward ML-based control for Physical AI.' } = Astro.props;
+const {
+  title,
+  description = 'Rohan Divekar, controls engineer: real-time control from actuators to learned policies.',
+} = Astro.props;
 const path = Astro.url.pathname;
 const links = [
   { href: '/projects/', label: 'Projects' },
-  { href: '/concepts/', label: 'Concepts' },
+  { href: '/concepts/', label: 'Notes' },
   { href: '/log/', label: 'Log' },
 ];
 ---
@@ -22,14 +26,24 @@ const links = [
     <title>{title}</title>
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="/" class="name">Rohan</a>
-        {links.map((l) => <a href={l.href} class={path.startsWith(l.href) ? 'active' : ''}>{l.label}</a>)}
+    <header class="site-header">
+      <nav class="wrap" aria-label="Main">
+        <a href="/" class="home">Rohan Divekar</a>
+        {links.map((l) => (
+          <a href={l.href} aria-current={path.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>
+        ))}
+        <a href="https://github.com/divekarrohan" class="gh">GitHub</a>
       </nav>
     </header>
     <main>
       <slot />
     </main>
+    <footer>
+      <div class="wrap">
+        <span>Rohan Divekar</span>
+        <a href="https://github.com/divekarrohan">github.com/divekarrohan</a>
+        <span>Every demo number links to the code that produced it.</span>
+      </div>
+    </footer>
   </body>
 </html>

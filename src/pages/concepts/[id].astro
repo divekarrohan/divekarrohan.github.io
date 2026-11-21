@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import BalanceDemo from '../../components/BalanceDemo.astro';
 
 export async function getStaticPaths() {
   const concepts = await getCollection('concepts');
@@ -11,33 +12,39 @@ const { concept } = Astro.props;
 const c = concept.data;
 const { Content } = await render(concept);
 ---
-<Base title={`${c.title} · Rohan`} description={c.claim}>
-  <p><a href="/concepts/">← All concepts</a></p>
-  <span class:list={['badge', { live: c.status === 'live' }]}>Month {c.month} · {c.status}</span>
-  <h1>{c.title}</h1>
-  <p>{c.claim}</p>
+<Base title={`${c.title} · Rohan Divekar`} description={c.claim}>
+  <div class="wrap">
+    <section style="padding-top: 32px; max-width: 900px">
+      <p><a href="/concepts/">All notes</a></p>
+      <p class="quiet">{c.week === 0 ? 'Ready now' : `Week ${c.week}`} · {c.status === 'live' ? 'Live' : 'Planned'}</p>
+      <h1 style="font-size: clamp(2.2rem, 5vw, 3.25rem); margin-bottom: 18px">{c.title}</h1>
+      <p style="font-size: 1.2rem">{c.claim}</p>
 
-  <div class="demo">
-    {!c.demo.src && <span class="muted">Demo pending ({c.demo.type})</span>}
-    {c.demo.src && (c.demo.type === 'plot' || c.demo.type === 'animation') && <img src={c.demo.src} alt={c.demo.alt} />}
-    {c.demo.src && c.demo.type === 'video' && <video src={c.demo.src} controls muted loop playsinline aria-label={c.demo.alt}></video>}
-    {c.demo.src && c.demo.type === 'live' && <iframe src={c.demo.src} title={c.demo.alt} loading="lazy"></iframe>}
+      {c.demo.type === 'live' && c.demo.src === 'balance' ? (
+        <BalanceDemo />
+      ) : !c.demo.src ? (
+        <div class="pending">Demo arrives in week {c.week}: {c.demo.alt.toLowerCase()}.</div>
+      ) : c.demo.type === 'video' ? (
+        <video src={c.demo.src} controls muted loop playsinline aria-label={c.demo.alt} style="width:100%"></video>
+      ) : c.demo.type === 'live' ? (
+        <iframe src={c.demo.src} title={c.demo.alt} loading="lazy" style="width:100%; aspect-ratio:16/9; border:0"></iframe>
+      ) : (
+        <img src={c.demo.src} alt={c.demo.alt} style="width:100%" />
+      )}
+
+      {c.metrics.length > 0 && (
+        <div class="numbers">
+          {c.metrics.map((m) => <div><span class="v">{m.value}</span><span class="l">{m.label}</span></div>)}
+        </div>
+      )}
+
+      <dl class="facts-table">
+        <dt>Shows</dt><dd>{c.shows}</dd>
+        <dt>Doesn't show</dt><dd>{c.limits}</dd>
+        {c.code && <><dt>Code</dt><dd><a href={c.code}>{c.code.replace('https://github.com/', '')}</a></dd></>}
+        {c.derivation && <><dt>Derivation</dt><dd><a href={c.derivation}>{c.derivation}</a></dd></>}
+      </dl>
+      <Content />
+    </section>
   </div>
-
-  {c.metrics.length > 0 && (
-    <div class="metrics">
-      {c.metrics.map((m) => (
-        <div class="metric"><div class="value">{m.value}</div><div class="label">{m.label}</div></div>
-      ))}
-    </div>
-  )}
-
-  <dl>
-    <dt>Shows</dt><dd>{c.shows}</dd>
-    <dt>Doesn't show</dt><dd>{c.limits}</dd>
-    {c.code && <><dt>Code</dt><dd><a href={c.code}>{c.code}</a></dd></>}
-    {c.derivation && <><dt>Derivation</dt><dd><a href={c.derivation}>{c.derivation}</a></dd></>}
-  </dl>
-
-  <Content />
 </Base>
