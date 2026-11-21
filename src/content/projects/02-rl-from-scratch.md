@@ -1,7 +1,7 @@
 ---
 title: RL from the ground up
 repo: rl-from-scratch
-weeks: "7–9"
+weeks: "9–10"
 order: 2
 status: planned
 proves: RL fundamentals, from value iteration to PPO

@@ -1,7 +1,7 @@
 ---
 title: "Training with identified actuators"
 claim: "Training with the identified actuator model and randomized latency changes what the policy learns."
-week: 11
+week: 12
 order: 1
 status: planned
 demo: { type: plot, alt: "Training curves for three policy variants" }

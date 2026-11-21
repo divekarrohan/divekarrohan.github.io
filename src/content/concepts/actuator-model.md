@@ -1,6 +1,6 @@
 ---
 title: "Actuator model"
-claim: "The torque a joint delivers is not the torque you command: speed limits, friction, gearing and delay sit in between."
+claim: "The torque a joint delivers is not the torque you command: speed limits, friction, backlash, gearing and delay sit in between."
 week: 2
 order: 1
 status: planned

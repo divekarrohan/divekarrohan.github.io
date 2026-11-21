@@ -1,7 +1,7 @@
 ---
 title: Q-learning
 claim: An agent that only tries actions and sees rewards can learn the same answer value iteration computes from the rules.
-week: 7
+week: 9
 order: 2
 status: planned
 demo: { type: animation, alt: "Agent on FrozenLake improving over episodes" }

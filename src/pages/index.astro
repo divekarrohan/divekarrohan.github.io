@@ -10,11 +10,11 @@ const nextNotes = concepts.slice(0, 5);
 const live = concepts.filter((c) => c.data.status === 'live').length;
 
 const layers = [
-  { rate: '50 Hz', name: 'Policy', what: 'RL velocity policy trained in mjlab with my identified actuator model, exported to ONNX', when: 'Weeks 10–13', policy: true },
+  { rate: '50 Hz', name: 'Policy', what: 'RL velocity policy from mjlab, run through ONNX inside the C++ loop and swept against delay, backlash and sensor noise', when: 'Weeks 7–8, 11–13', policy: true },
   { rate: '50 Hz', name: 'Safety filter', what: 'A control-barrier-function QP that keeps policy targets inside joint and balance limits', when: 'Week 14' },
   { rate: '500 Hz', name: 'Estimation and whole-body balance', what: 'Contact-aided Kalman filter for the floating base; whole-body QP that keeps the robot standing', when: 'Weeks 5–6' },
   { rate: '1 kHz', name: 'Joint servo', what: 'PD and impedance control with gravity feedforward, torque limits and a command watchdog', when: 'Week 4' },
-  { rate: '1 kHz', name: 'Hardware interface and actuators', what: 'A bus with latency, jitter and dropped packets; motor and gearbox models identified from data', when: 'Weeks 1–3' },
+  { rate: '1 kHz', name: 'Hardware interface and actuators', what: 'A bus with latency, jitter, dropped packets and sensor noise; motor and gearbox models, backlash included, identified from data', when: 'Weeks 1–3' },
   { rate: 'All', name: 'Supervisor', what: 'Detects faults at every layer and hands control from the policy to damping, then to the whole-body stand', when: 'Week 14' },
 ];
 
@@ -51,7 +51,7 @@ const roles = [
     <section id="stack" aria-labelledby="stack-h">
       <div class="section-head">
         <h2 id="stack-h">Building now: a humanoid control stack, from actuators to policy</h2>
-        <p>Sixteen weeks on a simulated Unitree G1. Each layer runs at its own rate, and each gets a published demo. The headline result will be one plot: the same RL policy trained three ways, run inside this stack across a latency sweep.</p>
+        <p>Sixteen weeks on a simulated Unitree G1. Each layer runs at its own rate, and each gets a published demo. The headline result will be one plot: the same RL policy trained three ways, run inside this stack across sweeps of latency, backlash and sensor noise.</p>
       </div>
       <ol class="ladder">
         {layers.map((l) => (

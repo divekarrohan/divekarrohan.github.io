@@ -1,7 +1,7 @@
 ---
 title: PPO from scratch
 claim: A from-scratch PPO matches CleanRL's reference implementation on MuJoCo tasks.
-week: 9
+week: 10
 order: 1
 status: planned
 demo: { type: video, alt: "Hopper policy at early, middle and final checkpoints" }
