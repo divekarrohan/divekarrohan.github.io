@@ -1,10 +1,10 @@
 ---
-title: Policy gradient and baselines
-claim: A baseline leaves the policy gradient unbiased but cuts its variance.
+title: Policy gradient (REINFORCE) and baselines
+claim: A neural-network policy can be trained directly from rewards, and subtracting a baseline makes that learning far less noisy.
 month: 1
 order: 4
 status: planned
-demo: { type: animation, alt: "REINFORCE moving a Gaussian policy toward reward on a 1D task" }
-shows: REINFORCE learning on a 1D task, and gradient variance with vs without a baseline.
-limits: A toy problem with a known optimum.
+demo: { type: video, alt: "CartPole before and after training with REINFORCE" }
+shows: REINFORCE balancing CartPole, and the gradient's noise with vs without a baseline.
+limits: A small discrete-action task.
 ---
