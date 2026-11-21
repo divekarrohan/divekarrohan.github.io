@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Controls engineer building toward ML-based control for Physical AI.' } = Astro.props;
+const path = Astro.url.pathname;
+const links = [
+  { href: '/projects/', label: 'Projects' },
+  { href: '/concepts/', label: 'Concepts' },
+  { href: '/log/', label: 'Log' },
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="name">Rohan</a>
+        {links.map((l) => <a href={l.href} class={path.startsWith(l.href) ? 'active' : ''}>{l.label}</a>)}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

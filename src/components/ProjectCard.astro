@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const p = project.data;
+const repoUrl = `https://github.com/divekarrohan/${p.repo}`;
+---
+<a class="card" href={p.status === 'planned' ? undefined : repoUrl}>
+  <span class:list={['badge', { live: p.status === 'live' }]}>Month {p.month} · {p.status}</span>
+  <h3>{p.title}</h3>
+  <p class="headline">{p.headline}</p>
+  <p class="muted">Proves: {p.proves}</p>
+</a>

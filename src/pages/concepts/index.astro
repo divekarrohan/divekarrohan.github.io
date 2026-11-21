@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import DemoCard from '../../components/DemoCard.astro';
+
+const concepts = (await getCollection('concepts')).sort(
+  (a, b) => a.data.month - b.data.month || a.data.order - b.data.order,
+);
+const months = [...new Set(concepts.map((c) => c.data.month))];
+---
+<Base title="Concepts · Rohan">
+  <h1>Concepts</h1>
+  <p class="muted">Every concept I learn gets a public demo and the numbers behind it.</p>
+  {months.map((m) => (
+    <>
+      <h2>Month {m}</h2>
+      <div class="grid">
+        {concepts.filter((c) => c.data.month === m).map((c) => <DemoCard concept={c} />)}
+      </div>
+    </>
+  ))}
+</Base>

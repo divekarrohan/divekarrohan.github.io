@@ -1,0 +1,15 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  concept: CollectionEntry<'concepts'>;
+}
+const { concept } = Astro.props;
+const c = concept.data;
+---
+<a class="card" href={`/concepts/${concept.id}/`}>
+  <span class:list={['badge', { live: c.status === 'live' }]}>Month {c.month} · {c.status}</span>
+  <h3>{c.title}</h3>
+  <p>{c.claim}</p>
+  <p class="muted">Demo: {c.demo.type}</p>
+</a>
